@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+service RaftService {
+    // Líder recibe solicitudes del proxy para escribir en la base de datos
+    rpc WriteRequest (WriteMessage) returns (WriteResponse);
+    
+    // Followers responden a las lecturas
+    rpc ReadRequest (ReadMessage) returns (ReadResponse);
+
+    // Líder replica los logs a los followers
+    rpc AppendEntries (LogEntry) returns (AppendResponse);
+}
+
+message WriteMessage {
+    string key = 1;
+    string value = 2;
+}
+
+message WriteResponse {
+    bool success = 1;
+}
+
+message ReadMessage {
+    string key = 1;
+}
+
+message ReadResponse {
+    string value = 1;
+}
+
+message LogEntry {
+    int32 term = 1;
+    string key = 2;
+    string value = 3;
+}
+
+message AppendResponse {
+    bool success = 1;
+}
